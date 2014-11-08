@@ -17,6 +17,7 @@ class BinarySearchTree {
     void printNode(TreeNode<Type> *node);
     bool isLeaf(TreeNode<Type> *node);
     void remove(Type chave, TreeNode<Type> *node);
+    TreeNode<Type> *searchToRemove(Type chave, TreeNode<Type> *node); // Atualiza leftSize antes de remover
 
     std::string percorreEmNivel(TreeNode<Type> *node);
 

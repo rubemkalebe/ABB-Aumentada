@@ -176,7 +176,7 @@ TreeNode<Type> *BinarySearchTree<Type>::search(Type chave, TreeNode<Type> *node)
 
 template <class Type>
 void BinarySearchTree<Type>::remove(Type chave, TreeNode<Type> *node) {
-    TreeNode<Type> *tmp = search(chave, raiz);
+    TreeNode<Type> *tmp = searchToRemove(chave, node);
     if(tmp != NULL) {
         if(isLeaf(tmp)) {
             if(tmp->getPai()->getEsq() == tmp) {
@@ -209,7 +209,7 @@ void BinarySearchTree<Type>::remove(Type chave, TreeNode<Type> *node) {
         } else {
             TreeNode<Type> *suc = sucessor(tmp);
             Type infoTemp = suc->getInfo();
-            remove(infoTemp);
+            remove(infoTemp, tmp->getDir());
             tmp->setInfo(infoTemp);
             return;
         }
@@ -217,10 +217,25 @@ void BinarySearchTree<Type>::remove(Type chave, TreeNode<Type> *node) {
 }
 
 template <class Type>
+TreeNode<Type> *BinarySearchTree<Type>::searchToRemove(Type chave, TreeNode<Type> *node) {
+    TreeNode<Type> *tmp = node;
+    while(tmp != NULL) {
+        if(chave == tmp->getInfo()) {
+            return tmp;
+        } else if(chave > tmp->getInfo()) {
+            tmp = tmp->getDir();
+        } else {
+            tmp->decreasesLeftSize();
+            tmp = tmp->getEsq();
+        }
+    }
+    return NULL;
+}
+
+template <class Type>
 void BinarySearchTree<Type>::printNode(TreeNode<Type> *node) {
     if(node != NULL) {
-        //std::cout << node->getInfo() << std::endl;
-        std::cout << "(" << node->getLeftSize() << ") ";
+        std::cout << node->getInfo() << std::endl;
     }
 }
 
@@ -240,7 +255,6 @@ std::string BinarySearchTree<Type>::percorreEmNivel(TreeNode<Type> *node) {
         s = out.str();
         str += s;
         str += ' ';
-        printNode(tmp);
         if(tmp->getEsq() != NULL)
             fila.push(tmp->getEsq());
         if(tmp->getDir() != NULL)
