@@ -146,8 +146,10 @@ void BinarySearchTree<Type>::insert(Type chave, TreeNode<Type> *node) {
             }
         } else if(chave < tmp->getInfo()){
             if(tmp->getEsq() != NULL) {
+                tmp->increasesLeftSize();
                 tmp = tmp->getEsq();
             } else {
+                tmp->increasesLeftSize();
                 tmp->setEsq(createNode(chave));
                 tmp->getEsq()->setPai(tmp);
                 return;
@@ -217,7 +219,8 @@ void BinarySearchTree<Type>::remove(Type chave, TreeNode<Type> *node) {
 template <class Type>
 void BinarySearchTree<Type>::printNode(TreeNode<Type> *node) {
     if(node != NULL) {
-        std::cout << node->getInfo() << std::endl;
+        //std::cout << node->getInfo() << std::endl;
+        std::cout << "(" << node->getLeftSize() << ") ";
     }
 }
 
@@ -237,6 +240,7 @@ std::string BinarySearchTree<Type>::percorreEmNivel(TreeNode<Type> *node) {
         s = out.str();
         str += s;
         str += ' ';
+        printNode(tmp);
         if(tmp->getEsq() != NULL)
             fila.push(tmp->getEsq());
         if(tmp->getDir() != NULL)

@@ -37,6 +37,7 @@ public:
     void destroy_tree();
     bool isEmpty();
 
+    // Retorna uma string que contem a sequencia de visitacao (percorrimento) da BST por nivel
     std::string toString();
 
     /* Metodos de busca */
