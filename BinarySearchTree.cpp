@@ -24,7 +24,6 @@ void BinarySearchTree<Type>::insert(Type chave) {
         insert(chave, raiz);
     } else {
         raiz = createNode(chave);
-        raiz->pai = NULL;
     }
 }
 
@@ -57,26 +56,28 @@ std::string BinarySearchTree<Type>::toString() {
     if(raiz != NULL) {
         std::string str = percorreEmNivel(raiz);
         return str;
+    } else {
+        return "A arvore esta vazia!!\n";
     }
 }
 
 template <class Type>
 Type BinarySearchTree<Type>::findMin() {
     if(raiz == NULL) {
-        return -1;
+        return -1; // Depois melhorar isso daqui!! Se fosse uma BST de char...
     } else {
         TreeNode<Type> *tmp = findMin(raiz);
-        return tmp->info;
+        return tmp->getInfo();
     }
 }
 
 template <class Type>
 Type BinarySearchTree<Type>::findMax() {
     if(raiz == NULL) {
-        return -1;
+        return -1; // Depois melhorar isso daqui!! Se fosse uma BST de char...
     } else {
         TreeNode<Type> *tmp = findMax(raiz);
-        return tmp->info;
+        return tmp->getInfo();
     }
 }
 
@@ -85,10 +86,10 @@ Type BinarySearchTree<Type>::sucessor(Type chave) {
     TreeNode<Type> *tmp = search(chave, raiz);
     if(tmp != NULL) {
         if((tmp = sucessor(tmp)) != NULL) {
-            return tmp->info;
+            return tmp->getInfo();
         }
     }
-    return -1;
+    return -1; // Depois melhorar isso daqui!!
 }
 
 template <class Type>
@@ -96,10 +97,10 @@ Type BinarySearchTree<Type>::predecessor(Type chave) {
     TreeNode<Type> *tmp = search(chave, raiz);
     if(tmp != NULL) {
         if((tmp = predecessor(tmp)) != NULL) {
-            return tmp->info;
+            return tmp->getInfo();
         }
     }
-    return -1;
+    return -1; // Depois melhorar isso daqui!!
 }
 
 /****************************
@@ -110,24 +111,21 @@ template <class Type>
 void BinarySearchTree<Type>::destroy_tree(TreeNode<Type> *node) {
     // Metodo recursivo para desalocar memoria
     if(node != NULL) {
-        destroy_tree(node->esq);
-        destroy_tree(node->dir);
+        destroy_tree(node->getEsq());
+        destroy_tree(node->getDir());
         delete node;
     }
 }
 
 template <class Type>
 TreeNode<Type> *BinarySearchTree<Type>::createNode(Type chave) {
-    TreeNode<Type> *tmp = new TreeNode<Type>;
-    tmp->info = chave;
-    tmp->esq = NULL;
-    tmp->dir = NULL;
+    TreeNode<Type> *tmp = new TreeNode<Type>(chave);
     return tmp;
 }
 
 template <class Type>
 bool BinarySearchTree<Type>::isLeaf(TreeNode<Type> *node) {
-    return (node->esq == NULL) && (node->dir == NULL);
+    return (node->getEsq() == NULL) && (node->getDir() == NULL);
 }
 
 template <class Type>
@@ -135,24 +133,24 @@ void BinarySearchTree<Type>::insert(Type chave, TreeNode<Type> *node) {
     // Versao iterativa
     TreeNode<Type> *tmp = node;
     while(tmp != NULL) {
-        if(chave == tmp->info) {
+        if(chave == tmp->getInfo()) {
             std::cout << "O valor " << chave << " ja foi inserido na BST!" << std::endl;
             return;
-        } else if(chave > tmp->info) {
-            if(tmp->dir != NULL) {
-                tmp = tmp->dir;
+        } else if(chave > tmp->getInfo()) {
+            if(tmp->getDir() != NULL) {
+                tmp = tmp->getDir();
             } else {
-                tmp->dir = createNode(chave);
-                tmp->dir->pai = tmp;
-                break;
+                tmp->setDir(createNode(chave));
+                tmp->getDir()->setPai(tmp);
+                return;
             }
-        } else if(chave < tmp->info){
-            if(tmp->esq != NULL) {
-                tmp = tmp->esq;
+        } else if(chave < tmp->getInfo()){
+            if(tmp->getEsq() != NULL) {
+                tmp = tmp->getEsq();
             } else {
-                tmp->esq = createNode(chave);
-                tmp->esq->pai = tmp;
-                break;
+                tmp->setEsq(createNode(chave));
+                tmp->getEsq()->setPai(tmp);
+                return;
             }
         }
     }
@@ -163,12 +161,12 @@ TreeNode<Type> *BinarySearchTree<Type>::search(Type chave, TreeNode<Type> *node)
     // Versao iterativa
     TreeNode<Type> *tmp = node;
     while(tmp != NULL) {
-        if(chave == tmp->info) {
+        if(chave == tmp->getInfo()) {
             return tmp;
-        } else if(chave > tmp->info) {
-            tmp = tmp->dir;
+        } else if(chave > tmp->getInfo()) {
+            tmp = tmp->getDir();
         } else {
-            tmp = tmp->esq;
+            tmp = tmp->getEsq();
         }
     }
     return NULL;
@@ -179,26 +177,38 @@ void BinarySearchTree<Type>::remove(Type chave, TreeNode<Type> *node) {
     TreeNode<Type> *tmp = search(chave, raiz);
     if(tmp != NULL) {
         if(isLeaf(tmp)) {
-            if(tmp->pai->esq == tmp) {
-                tmp->pai->esq = NULL;
+            if(tmp->getPai()->getEsq() == tmp) {
+                tmp->getPai()->setEsq(NULL);
             } else {
-                tmp->pai->dir = NULL;
+                tmp->getPai()->setDir(NULL);
             }
             delete tmp;
             return;
-        } else if(((tmp->esq != NULL) && (tmp->dir == NULL)) ||
-                  ((tmp->esq == NULL) && (tmp->dir != NULL))) {
-            if(tmp->pai->esq == tmp) {
-                tmp->pai->esq = tmp->esq;
+        } else if((tmp->getEsq() != NULL) && (tmp->getDir() == NULL)) {
+            TreeNode<Type> *filho = tmp->getEsq();
+            if(tmp->getPai()->getEsq() == tmp) {
+                filho->setPai(tmp->getPai());
+                tmp->getPai()->setEsq(filho);
             } else {
-                tmp->pai->dir = tmp->esq;
+                filho->setPai(tmp->getPai());
+                tmp->getPai()->setDir(filho);
+            }
+            return;
+        } else if((tmp->getEsq() == NULL) && (tmp->getDir() != NULL)) {
+            TreeNode<Type> *filho = tmp->getDir();
+            if(tmp->getPai()->getEsq() == tmp) {
+                filho->setPai(tmp->getPai());
+                tmp->getPai()->setEsq(filho);
+            } else {
+                filho->setPai(tmp->getPai());
+                tmp->getPai()->setDir(filho);
             }
             return;
         } else {
             TreeNode<Type> *suc = sucessor(tmp);
-            Type infoTemp = suc->info;
+            Type infoTemp = suc->getInfo();
             remove(infoTemp);
-            tmp->info = infoTemp;
+            tmp->setInfo(infoTemp);
             return;
         }
     }
@@ -207,7 +217,7 @@ void BinarySearchTree<Type>::remove(Type chave, TreeNode<Type> *node) {
 template <class Type>
 void BinarySearchTree<Type>::printNode(TreeNode<Type> *node) {
     if(node != NULL) {
-        std::cout << node->info << std::endl;
+        std::cout << node->getInfo() << std::endl;
     }
 }
 
@@ -223,14 +233,14 @@ std::string BinarySearchTree<Type>::percorreEmNivel(TreeNode<Type> *node) {
         tmp = fila.front();
         fila.pop();
         std::stringstream out;
-        out << tmp->info;
+        out << tmp->getInfo();
         s = out.str();
         str += s;
         str += ' ';
-        if(tmp->esq != NULL)
-            fila.push(tmp->esq);
-        if(tmp->dir != NULL)
-            fila.push(tmp->dir);
+        if(tmp->getEsq() != NULL)
+            fila.push(tmp->getEsq());
+        if(tmp->getDir() != NULL)
+            fila.push(tmp->getDir());
 
     }
     return str;
@@ -240,8 +250,8 @@ template <class Type>
 TreeNode<Type> *BinarySearchTree<Type>::findMin(TreeNode<Type> *node) {
     // Versao iterativa
     TreeNode<Type> *tmp = node;
-    while(tmp->esq != NULL) {
-        tmp = tmp->esq;
+    while(tmp->getEsq() != NULL) {
+        tmp = tmp->getEsq();
     }
     return tmp;
 }
@@ -250,25 +260,25 @@ template <class Type>
 TreeNode<Type> *BinarySearchTree<Type>::findMax(TreeNode<Type> *node) {
     // Versao iterativa
     TreeNode<Type> *tmp = node;
-    while(tmp->dir != NULL) {
-        tmp = tmp->dir;
+    while(tmp->getDir() != NULL) {
+        tmp = tmp->getDir();
     }
     return tmp;
 }
 
 template <class Type>
 TreeNode<Type> *BinarySearchTree<Type>::sucessor(TreeNode<Type> *node) {
-    if(node->dir != NULL) {
-        return findMin(node->dir);
+    if(node->getDir() != NULL) {
+        return findMin(node->getDir());
     } else {
         TreeNode<Type> *p;
         TreeNode<Type> *t;
-        p = node->pai;
+        p = node->getPai();
         t = node;
-        while((p != NULL) && (t == p->dir)) {
+        while((p != NULL) && (t == p->getDir())) {
             // vai subindo na arvore
             t = p;
-            p = t->pai;
+            p = t->getPai();
         }
         if(p == NULL) {
             // nao tem sucessor
@@ -281,17 +291,17 @@ TreeNode<Type> *BinarySearchTree<Type>::sucessor(TreeNode<Type> *node) {
 
 template <class Type>
 TreeNode<Type> *BinarySearchTree<Type>::predecessor(TreeNode<Type> *node) {
-    if(node->esq != NULL) {
-        return findMax(node->esq);
+    if(node->getEsq() != NULL) {
+        return findMax(node->getEsq());
     } else {
         TreeNode<Type> *p;
         TreeNode<Type> *t;
-        p = node->pai;
+        p = node->getPai();
         t = node;
-        while((p != NULL) && (t == p->esq)) {
+        while((p != NULL) && (t == p->getEsq())) {
             // vai subindo na arvore
             t = p;
-            p = t->pai;
+            p = t->getPai();
         }
         if(p == NULL) {
             // nao tem predecessor
