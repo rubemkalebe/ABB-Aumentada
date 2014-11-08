@@ -18,6 +18,9 @@ public:
     // Apontador para o pai do no
     TreeNode *pai;
 
+    // Armazena o numero de nos na subarvore esquerda
+    int leftSize;
+
 };
 
 #endif // TREENODE_HPP
