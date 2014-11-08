@@ -21,6 +21,12 @@ public:
     // Armazena o numero de nos na subarvore esquerda
     int leftSize;
 
+    // Incrementa leftSize
+    void increasesLeftSize() { leftSize++; }
+
+    // Decrementa leftSize
+    void decreasesLeftSize() { leftSize--; }
+
 };
 
 #endif // TREENODE_HPP
