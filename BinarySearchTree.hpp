@@ -4,6 +4,7 @@
 #include "TreeNode.hpp"
 #include <queue>
 #include <sstream>
+#include <algorithm>
 
 template <class Type>
 class BinarySearchTree {
@@ -35,6 +36,9 @@ class BinarySearchTree {
     TreeNode<Type> *enesimoElemento(int index, TreeNode<Type> *node);
     int posicao(TreeNode<Type> *root, TreeNode<Type> *node);
 
+    int altura(TreeNode<Type> *node);
+    bool ehCheia(TreeNode<Type> *node);
+    bool ehCompleta(TreeNode<Type> *node);
 
 public:
 
@@ -60,6 +64,9 @@ public:
     Type enesimoElemento(int index);
     int posicao(Type elem);
     Type mediana();
+
+    bool ehCheia();
+    bool ehCompleta();
 
     int size();
 

@@ -143,6 +143,16 @@ Type BinarySearchTree<Type>::mediana() {
 }
 
 template <class Type>
+bool BinarySearchTree<Type>::ehCheia() {
+    return ehCheia(raiz);
+}
+
+template <class Type>
+bool BinarySearchTree<Type>::ehCompleta() {
+
+}
+
+template <class Type>
 int BinarySearchTree<Type>::size() {
     return _size;
 }
@@ -406,4 +416,29 @@ int BinarySearchTree<Type>::posicao(TreeNode<Type> *root, TreeNode<Type> *node) 
         tmp = tmp->getPai();
     }
     return index;
+}
+
+template <class Type>
+int BinarySearchTree<Type>::altura(TreeNode<Type> *node) {
+    int u, v;
+    if(node == NULL) {
+        return -1;
+    }
+    u = altura(node->getEsq());
+    v = altura(node->getDir());
+    if(u > v) {
+        return u + 1;
+    } else {
+        return v + 1;
+    }
+}
+
+template <class Type>
+bool BinarySearchTree<Type>::ehCheia(TreeNode<Type> *node) {
+    return (std::pow(2, altura(node) + 1) - 1) == (_size);
+}
+
+template <class Type>
+bool BinarySearchTree<Type>::ehCompleta(TreeNode<Type> *node) {
+
 }
