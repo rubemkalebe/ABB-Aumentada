@@ -10,6 +10,7 @@ BinarySearchTree<Type>::BinarySearchTree() {
     // Como uma arvore eh representada pelo endereço do no raiz
     // uma arvore vazia tem que ser representada pelo valor NULL.
     raiz = NULL;
+    _size = 0;
 }
 
 template <class Type>
@@ -25,6 +26,7 @@ void BinarySearchTree<Type>::insert(Type chave) {
     } else {
         raiz = createNode(chave);
     }
+    _size++;
 }
 
 template <class Type>
@@ -33,6 +35,7 @@ void BinarySearchTree<Type>::remove(Type chave) {
         std::cout << "A arvore esta vazia!!" << std::endl;
     } else {
         remove(chave, raiz);
+        _size--;
     }
 }
 
@@ -132,6 +135,11 @@ Type BinarySearchTree<Type>::mediana() {
         return enesimoElemento(medianIndex);
     }
     return -1; // Depois melhorar isso daqui!!
+}
+
+template <class Type>
+int BinarySearchTree<Type>::size() {
+    return _size;
 }
 
 /****************************

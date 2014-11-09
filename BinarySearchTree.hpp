@@ -11,6 +11,9 @@ class BinarySearchTree {
     // Raiz da arvore
     TreeNode<Type> *raiz;
 
+    // Quantidade de elementos na arvore
+    int _size;
+
     void destroy_tree(TreeNode<Type> *node);
     void insert(Type chave, TreeNode<Type> *node);
     TreeNode<Type> *createNode(Type chave);
@@ -57,6 +60,8 @@ public:
     Type enesimoElemento(int index);
     int posicao(Type elem);
     Type mediana();
+
+    int size();
 
 };
 
