@@ -28,6 +28,11 @@ class BinarySearchTree {
     TreeNode<Type> *sucessor(TreeNode<Type> *node);
     TreeNode<Type> *predecessor(TreeNode<Type> *node);
 
+    /* Metodos de busca com indexacao */
+    TreeNode<Type> *enesimoElemento(int index, TreeNode<Type> *node);
+    int posicao(TreeNode<Type> *root, TreeNode<Type> *node);
+
+
 public:
 
     BinarySearchTree();
@@ -47,6 +52,11 @@ public:
     bool search(Type chave);
     Type sucessor(Type chave);
     Type predecessor(Type chave);
+
+    /* Metodos de busca com indexacao */
+    Type enesimoElemento(int index);
+    int posicao(Type elem);
+    Type mediana();
 
 };
 

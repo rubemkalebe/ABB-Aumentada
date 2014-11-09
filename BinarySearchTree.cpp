@@ -103,6 +103,37 @@ Type BinarySearchTree<Type>::predecessor(Type chave) {
     return -1; // Depois melhorar isso daqui!!
 }
 
+template <class Type>
+Type BinarySearchTree<Type>::enesimoElemento(int index) {
+    if((raiz != NULL) && (index > 0)) {
+        TreeNode<Type> *tmp = enesimoElemento(index, raiz);
+        if(tmp != NULL) {
+            return tmp->getInfo();
+        }
+    }
+    return -1; // Depois melhorar isso daqui!!
+}
+
+template <class Type>
+int BinarySearchTree<Type>::posicao(Type elem) {
+    if(raiz != NULL) {
+        TreeNode<Type> *elemNode = search(elem, raiz);
+        if(elemNode != NULL) {
+            return posicao(raiz, elemNode);
+        }
+    }
+    return -1; // Depois melhorar isso daqui!!
+}
+
+template <class Type>
+Type BinarySearchTree<Type>::mediana() {
+    if(raiz != NULL) {
+        int medianIndex = 0; //POR ENQUANTO!!!
+        return enesimoElemento(medianIndex);
+    }
+    return -1; // Depois melhorar isso daqui!!
+}
+
 /****************************
  * Metodos privados *
 *****************************/
@@ -328,4 +359,38 @@ TreeNode<Type> *BinarySearchTree<Type>::predecessor(TreeNode<Type> *node) {
             return p;
         }
     }
+}
+
+template <class Type>
+TreeNode<Type> *BinarySearchTree<Type>::enesimoElemento(int index, TreeNode<Type> *node) {
+    // Versao iterativa
+    TreeNode<Type> *tmp = node;
+    // Index-- para n atrapalhar a logica do leftSize :) q conta a partir do index = 0,
+    // mas segundo a especificacao, deve contar a partir do index = 1.
+    index--;
+    while(tmp != NULL) {
+        if(index == tmp->getLeftSize()) {
+            return tmp;
+        } else if(index < tmp->getLeftSize()) {
+            tmp = tmp->getEsq();
+        } else {
+            index = index - tmp->getLeftSize()-1;
+            tmp = tmp->getDir();
+        }
+    }
+    return NULL;
+}
+
+template <class Type>
+int BinarySearchTree<Type>::posicao(TreeNode<Type> *root, TreeNode<Type> *node) {
+    // Versao iterativa
+    TreeNode<Type> *tmp = node;
+    int index = node->getLeftSize() + 1;
+    while(tmp != root) {
+        if(tmp->getPai()->getDir() == tmp) {
+            index = index + tmp->getPai()->getLeftSize() + 1;
+        }
+        tmp = tmp->getPai();
+    }
+    return index;
 }
