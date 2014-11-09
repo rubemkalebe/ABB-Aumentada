@@ -131,7 +131,12 @@ int BinarySearchTree<Type>::posicao(Type elem) {
 template <class Type>
 Type BinarySearchTree<Type>::mediana() {
     if(raiz != NULL) {
-        int medianIndex = 0; //POR ENQUANTO!!!
+        int medianIndex;
+        if(_size % 2 != 0) {
+            medianIndex = (_size / 2) + 1;
+        } else {
+            medianIndex = (_size / 2);
+        }
         return enesimoElemento(medianIndex);
     }
     return -1; // Depois melhorar isso daqui!!
