@@ -60,7 +60,7 @@ std::string BinarySearchTree<Type>::toString() {
         std::string str = percorreEmNivel(raiz);
         return str;
     } else {
-        return "A arvore esta vazia!!\n";
+        return "A arvore esta vazia!!";
     }
 }
 
@@ -144,12 +144,21 @@ Type BinarySearchTree<Type>::mediana() {
 
 template <class Type>
 bool BinarySearchTree<Type>::ehCheia() {
-    return ehCheia(raiz);
+    if(raiz != NULL) {
+        return ehCheia(raiz);
+    } else {
+        return false;
+    }
+
 }
 
 template <class Type>
 bool BinarySearchTree<Type>::ehCompleta() {
-
+    if(raiz != NULL) {
+        return ehCompleta(raiz);
+    } else {
+        return false;
+    }
 }
 
 template <class Type>
@@ -435,10 +444,34 @@ int BinarySearchTree<Type>::altura(TreeNode<Type> *node) {
 
 template <class Type>
 bool BinarySearchTree<Type>::ehCheia(TreeNode<Type> *node) {
-    return (std::pow(2, altura(node) + 1) - 1) == (_size);
+    if((node->getEsq() == NULL) && (node->getDir() == NULL)) {
+        return true;
+    } else if((node->getEsq() != NULL) && (node->getDir() != NULL)) {
+        return ehCheia(node->getEsq()) && ehCheia(node->getDir());
+    } else {
+        return false;
+    }
 }
 
 template <class Type>
 bool BinarySearchTree<Type>::ehCompleta(TreeNode<Type> *node) {
-
+    if(ehCheia(node)) {
+        return true;
+    } else if((node->getEsq() != NULL) && (node->getDir() != NULL)) {
+        return ehCompleta(node->getEsq()) && ehCompleta(node->getDir());
+        /*return (std::abs(node->getEsq()->getLeftSize() -
+                         node->getDir()->getLeftSize()) == 1);*/
+    } else if(node->getEsq() != NULL) {
+        if(node->getLeftSize() == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        if((node->getDir()->getEsq() == NULL) && (node->getDir()->getDir() == NULL)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
