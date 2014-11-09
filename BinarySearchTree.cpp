@@ -455,12 +455,10 @@ bool BinarySearchTree<Type>::ehCheia(TreeNode<Type> *node) {
 
 template <class Type>
 bool BinarySearchTree<Type>::ehCompleta(TreeNode<Type> *node) {
-    if(ehCheia(node)) {
+    if((node->getEsq() == NULL) && (node->getDir() == NULL)) {
         return true;
     } else if((node->getEsq() != NULL) && (node->getDir() != NULL)) {
         return ehCompleta(node->getEsq()) && ehCompleta(node->getDir());
-        /*return (std::abs(node->getEsq()->getLeftSize() -
-                         node->getDir()->getLeftSize()) == 1);*/
     } else if(node->getEsq() != NULL) {
         if(node->getLeftSize() == 1) {
             return true;
