@@ -20,7 +20,16 @@ int main(int argc, char** argv) {
 
     BinarySearchTree<int> bst;
 
-    if(argc == 3) {
+    if(argc == 2) {
+        string entrada = argv[1];
+        readBST(entrada, bst);
+        string comando;
+        while(std::cin >> comando) {
+            if(!runCommand(comando, bst)) {
+                break;
+            }
+        }
+    } else if(argc == 3) {
         string entrada = argv[1];
         string comandos = argv[2];
         readBST(entrada, bst);
@@ -28,7 +37,7 @@ int main(int argc, char** argv) {
     } else {
         string comando;
         while(std::cin >> comando) {
-            if(runCommand(comando, bst)) {
+            if(!runCommand(comando, bst)) {
                 break;
             }
         }
@@ -115,8 +124,9 @@ bool runCommand(string &comando, BinarySearchTree<int> &bst) {
         std::cin >> n;
         bst.insert(n);
     } else if(comando == "SAIR") {
-        return true;
+        return false;
     } else {
         std::cout << "ERRO!! Comando desconhecido!!" << std::endl;
     }
+    return true;
 }

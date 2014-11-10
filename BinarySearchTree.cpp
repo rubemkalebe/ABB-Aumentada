@@ -196,6 +196,7 @@ void BinarySearchTree<Type>::insert(Type chave, TreeNode<Type> *node) {
     while(tmp != NULL) {
         if(chave == tmp->getInfo()) {
             std::cout << "O valor " << chave << " ja foi inserido na BST!" << std::endl;
+            undoUpdate(chave, node, false);
             return;
         } else if(chave > tmp->getInfo()) {
             if(tmp->getDir() != NULL) {
@@ -270,8 +271,10 @@ void BinarySearchTree<Type>::remove(Type chave, TreeNode<Type> *node) {
             remove(infoTemp, tmp->getDir());
             tmp->setInfo(infoTemp);
         }
-	_size--;
-    }    
+        _size--;
+    } else {
+        undoUpdate(chave, node, true);
+    }
 }
 
 template <class Type>
@@ -288,6 +291,34 @@ TreeNode<Type> *BinarySearchTree<Type>::searchToRemove(Type chave, TreeNode<Type
         }
     }
     return NULL;
+}
+
+template <class Type>
+void BinarySearchTree<Type>::undoUpdate(Type chave, TreeNode<Type> *node, bool inc) {
+    TreeNode<Type> *tmp = node;
+    if(inc) { // Incrementa o que decrementou
+        while(tmp != NULL) {
+            if(chave == tmp->getInfo()) {
+                return;
+            } else if(chave > tmp->getInfo()) {
+                tmp = tmp->getDir();
+            } else {
+                tmp->increasesLeftSize();
+                tmp = tmp->getEsq();
+            }
+        }
+    } else { // Decrementa o que incrementou
+        while(tmp != NULL) {
+            if(chave == tmp->getInfo()) {
+                return;
+            } else if(chave > tmp->getInfo()) {
+                tmp = tmp->getDir();
+            } else {
+                tmp->decreasesLeftSize();
+                tmp = tmp->getEsq();
+            }
+        }
+    }
 }
 
 template <class Type>

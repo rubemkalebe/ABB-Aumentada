@@ -10,8 +10,9 @@ Foi adicionado um campo *leftSize*, que armazena a quantidade de nós na subárv
 nó para implementar métodos extra que fazem parte de uma ABB Aumentada, como o *posicao()*.
 
 O programa principal pode receber dois arquivos como parâmetros: o primeiro contendo os elementos
-a serem inseridos na árvore e o segundo contendo os comandos. Também é possível executar o main
-sem enviar arquivos por parâmetro.
+a serem inseridos na árvore e o segundo contendo os comandos. Outra possibilidade é enviar somente
+o arquivo com os elementos a serem inseridos. Também é possível executar o main sem enviar arquivos
+por parâmetro.
 
 Comando para compilação: **g++ *.cpp -o nomeDoExecutavel**
 
@@ -33,3 +34,7 @@ IMPRIMA
 MEDIANA
 
 ENESIMO 10
+
+
+
+*Projeto disponível no link: https://github.com/rubemkalebe/ABB-Aumentada.*
