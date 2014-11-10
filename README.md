@@ -29,5 +29,7 @@ Os seguintes comandos são suportados:
 Exemplo:
 
 IMPRIMA
+
 MEDIANA
+
 ENESIMO 10
